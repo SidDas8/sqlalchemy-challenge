@@ -43,12 +43,10 @@ def home():
 @app.route("/api/v1.0/precipitation/")
 def precipitation():
 
-    # Calculate the date one year from the last date in data set.
-    last12months = dt.date(2017, 8, 23) - dt.timedelta(days = 365)
-
     # Perform a query to retrieve the data and precipitation scores
-    dataprecipscores = dict(session.query(measurement.date, measurement.prcp).filter(measurement.date >= last12months).order_by(measurement.date).all())
+    dataprecipscores = dict(session.query(measurement.date, measurement.prcp).order_by(measurement.date).all())
 
+    # Return JSON dictionary
     return jsonify(dataprecipscores)
 
 if __name__ == "__main__":
