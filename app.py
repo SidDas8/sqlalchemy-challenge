@@ -36,17 +36,20 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return (
-        f"Available Routes:<br/>"
+        f"Available Route:<br/>"
         f"/api/v1.0/precipitation<br/>"
-        f"/api/v1.0/stations<br/>"
-        f"/api/v1.0/tobs<br/>"
     )
 
+@app.route("/api/v1.0/precipitation/")
+def precipitation():
 
+    # Calculate the date one year from the last date in data set.
+    last12months = dt.date(2017, 8, 23) - dt.timedelta(days = 365)
 
+    # Perform a query to retrieve the data and precipitation scores
+    dataprecipscores = dict(session.query(measurement.date, measurement.prcp).filter(measurement.date >= last12months).order_by(measurement.date).all())
 
-
-session.close()
+    return jsonify(dataprecipscores)
 
 if __name__ == "__main__":
     app.run(debug=True)
